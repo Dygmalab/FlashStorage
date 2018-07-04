@@ -73,6 +73,19 @@ class EEPROMClass {
     void commit();
 
     uint16_t length() { return EEPROM_EMULATION_SIZE; }
+	
+	    //Functionality to 'get' and 'put' objects to and from EEPROM.
+    template< typename T > T &get( int idx, T &t ){
+        uint8_t *ptr = (uint8_t*) &t;
+        for( int count = sizeof(T) ; count ; --count)  *ptr++ = read(idx++);
+        return t;
+    }
+    
+    template< typename T > const T &put( int idx, const T &t ){
+        const uint8_t *ptr = (const uint8_t*) &t;
+        for( int count = sizeof(T) ; count ; --count)  write(idx++, *ptr++ );
+        return t;
+    }
 
   private:
     void init();
